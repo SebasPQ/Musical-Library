@@ -1,20 +1,27 @@
-# from DLinkedLists import DoublyLinkedList
+from DLinkedLists import DoublyLinkedList
 
 
 # Función ingresar canción
-def new_song(songs_list, song):
+def new_song(songs_list, trees, song):
     songs_list.insert_at_start(song)
+    for i in range(4):
+        trees[i].insert(songs_list.start_node, i)
 
 
 # Función remover canción
-def remove_song(songs_list, song_name):
-    node = songs_list.start_node
-    while node is not None:
-        if node.item[0].lower() == song_name:
-            songs_list.delete_element_by_value(node.item)
-            break
-        node = node.nref
-    if node is None:
+def remove_song(songs_list, trees, song_name):
+    node = trees[0].search_tree(song_name)
+    if node is not None:
+        trees[0].delete_node(node.content.start_node.item.item[0])
+
+        for i in range(1, 4):
+            value = node.content.start_node.item.item[i]
+            node_with_value = trees[i].search_tree(value)
+            node_with_value.content.delete_element_by_value(node.content.start_node.item)
+            if node_with_value.content.start_node is None:
+                trees[i].delete_node(node_with_value.data)
+        songs_list.delete_by_node(node.content.start_node.item)
+    else:
         print("No se encontró la canción "+song_name)
 
 
