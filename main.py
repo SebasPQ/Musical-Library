@@ -1,5 +1,4 @@
 from Avl_tree import AVLTree
-from DLinkedLists import DoublyLinkedList
 from Songs_functions import *
 
 
@@ -12,7 +11,7 @@ songs_names_tree = AVLTree()
 artists_tree = AVLTree()
 genres_tree = AVLTree()
 years_tree = AVLTree()
-trees=[songs_names_tree, artists_tree, genres_tree, years_tree]
+trees = [songs_names_tree, artists_tree, genres_tree, years_tree]
 
 new_song(songs, trees, ['Is it true', 'Tame impala', 'Pop', '2020'])
 new_song(songs, trees, ['Blinding Lights', 'The Weeknd', 'Pop', '2019'])
@@ -65,4 +64,3 @@ my_list.insert_at_end(3)
 my_list.insert_before_item(4, 5)
 my_list.traverse_list()
 """
-

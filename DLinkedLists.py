@@ -90,7 +90,7 @@ class DoublyLinkedList:
 
         aux = self.start_node.nref
         if aux is None:
-            self.start_node=None
+            self.start_node = None
         elif self.start_node.item == x:
             aux = self.start_node
             self.start_node = self.start_node.nref
