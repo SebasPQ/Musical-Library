@@ -8,30 +8,29 @@ def new_song(songs_list, trees, song):
 
 # Función remover canción
 def remove_song(songs_list, trees, song_name):
-    node = trees[0].search_tree(song_name)
+    node = trees[0].search_tree(song_name.lower())
     if node is not None:
-        trees[0].delete_node(node.content.start_node.item.item[0])
+        trees[0].delete_node(song_name.lower())
+        #trees[0].delete_by_node(node)
 
         for i in range(1, 4):
             value = node.content.start_node.item.item[i]
-            node_with_value = trees[i].search_tree(value)
-            node_with_value.content.delete_element_by_value(node.content.start_node.item)
+            node_with_value = trees[i].search_tree(value.lower())
+            node_with_value.content.delete_by_node(node.content.start_node)
             if node_with_value.content.start_node is None:
-                trees[i].delete_node(node_with_value.data)
+                trees[i].delete_node(node_with_value.data.lower())
+                #trees[i].delete_by_node(node_with_value)
         songs_list.delete_by_node(node.content.start_node.item)
     else:
         print("No se encontró la canción "+song_name)
 
 
 # Función mostrar datos de la canción por nombre
-def show_song(songs_list, song_name):
-    node = songs_list.start_node
-    while node is not None:
-        if node.item[0].lower() == song_name:
-            print(node.item)
-            break
-        node = node.nref
-    if node is None:
+def show_song(trees, song_name):
+    node = trees[0].search_tree(song_name.lower())
+    if node is not None:
+        print(node.content.start_node.item.item)
+    else:
         print("No se encontró la canción "+song_name)
 
 

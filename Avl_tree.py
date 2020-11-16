@@ -17,6 +17,7 @@ class AVLTree:
 
     def __init__(self):
         self.root = None
+        self.any = None
 
     def __print_helper(self, curr_ptr, indent, last):
         # print the tree structure on the screen
@@ -230,12 +231,12 @@ class AVLTree:
     # insert the key to the tree in its appropriate position
     def insert(self, key, index):
         # Verifies if node already exists
-        node = self.search_tree(key.item[index])
+        node = self.search_tree(key.item[index].lower())
         if node is not None:
             node.content.insert_at_end(key)
         else:
             # PART 1: Ordinary BST insert
-            node = BNode(key.item[index])
+            node = BNode(key.item[index].lower())
             node.content.insert_at_end(key)
             y = None
             x = self.root
@@ -261,6 +262,35 @@ class AVLTree:
     # delete the node from the tree
     def delete_node(self, data):
         return self.__delete_node_helper(self.root, data)
+
+    def delete_by_node(self, node):
+        self.any = node
+
+        if self.any.left is None and self.any.right is None:
+            if self.any.parent.right == self.any:
+                self.any.parent.right = None
+                self.any = None
+            else:
+                self.any.parent.left = None
+                self.any = None
+        # case 2: node has only one child
+        elif self.any.left is None:
+            self.any.parent.right = self.any.right
+            self.any.right.parent = self.any.parent
+            self.any = None
+
+        elif self.any.right is None:
+            self.any.parent.left = self.any.left
+            self.any.left.parent = self.any.parent
+            self.any = None
+
+        # case 3: has both children
+        else:
+            temp = self.minimum(self.any.right)
+            self.any.data = temp.data
+            self.any.right = self.__delete_node_helper(self.any.right, temp.data)
+
+        return self.any
 
     # print the tree structure on the screen
     def print_tree(self):
