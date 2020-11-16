@@ -15,9 +15,9 @@ class AVLTree:
     def __init__(self):
         self.root = None
 
-    def __printHelper(self, currPtr, indent, last):
+    def __print_helper(self, curr_ptr, indent, last):
         # print the tree structure on the screen
-        if currPtr is not None:
+        if curr_ptr is not None:
             sys.stdout.write(indent)
             if last:
                 sys.stdout.write("R----")
@@ -26,27 +26,27 @@ class AVLTree:
                 sys.stdout.write("L----")
                 indent += "|    "
 
-            print(currPtr.data)
+            print(curr_ptr.data)
 
-            self.__printHelper(currPtr.left, indent, False)
-            self.__printHelper(currPtr.right, indent, True)
+            self.__print_helper(curr_ptr.left, indent, False)
+            self.__print_helper(curr_ptr.right, indent, True)
 
-    def __searchTreeHelper(self, node, key):
+    def __search_tree_helper(self, node, key):
         if node is None or key == node.data:
             return node
 
         if key < node.data:
-            return self.__searchTreeHelper(node.left, key)
-        return self.__searchTreeHelper(node.right, key)
+            return self.__search_tree_helper(node.left, key)
+        return self.__search_tree_helper(node.right, key)
 
-    def __deleteNodeHelper(self, node, key):
+    def __delete_node_helper(self, node, key):
         # search the key
         if node is None:
             return node
         elif key < node.data:
-            node.left = self.__deleteNodeHelper(node.left, key)
+            node.left = self.__delete_node_helper(node.left, key)
         elif key > node.data:
-            node.right = self.__deleteNodeHelper(node.right, key)
+            node.right = self.__delete_node_helper(node.right, key)
         else:
             # the key has been found, now delete it
 
@@ -56,25 +56,21 @@ class AVLTree:
 
             # case 2: node has only one child
             elif node.left is None:
-                temp = node
                 node = node.right
 
             elif node.right is None:
-                temp = node
                 node = node.left
 
             # case 3: has both children
             else:
                 temp = self.minimum(node.right)
                 node.data = temp.data
-                node.right = self.__deleteNodeHelper(node.right, temp.data)
+                node.right = self.__delete_node_helper(node.right, temp.data)
 
-        # Write the update balance logic here
-        # YOUR CODE HERE
         return node
 
     # update the balance factor the node
-    def __updateBalance(self, node):
+    def __update_balance(self, node):
         if node.bf < -1 or node.bf > 1:
             self.__rebalance(node)
             return
@@ -87,69 +83,71 @@ class AVLTree:
                 node.parent.bf += 1
 
             if node.parent.bf != 0:
-                self.__updateBalance(node.parent)
+                self.__update_balance(node.parent)
 
     # rebalance the tree
     def __rebalance(self, node):
         if node.bf > 0:
             if node.right.bf < 0:
-                self.rightRotate(node.right)
-                self.leftRotate(node)
+                self.right_rotate(node.right)
+                self.left_rotate(node)
             else:
-                self.leftRotate(node)
+                self.left_rotate(node)
         elif node.bf < 0:
             if node.left.bf > 0:
-                self.leftRotate(node.left)
-                self.rightRotate(node)
+                self.left_rotate(node.left)
+                self.right_rotate(node)
             else:
-                self.rightRotate(node)
+                self.right_rotate(node)
 
-    def __preOrderHelper(self, node):
+    def __preorder_helper(self, node):
         if node is not None:
             sys.stdout.write(node.data + " ")
-            self.__preOrderHelper(node.left)
-            self.__preOrderHelper(node.right)
+            self.__preorder_helper(node.left)
+            self.__preorder_helper(node.right)
 
-    def __inOrderHelper(self, node):
+    def __inorder_helper(self, node):
         if node is not None:
-            self.__inOrderHelper(node.left)
+            self.__inorder_helper(node.left)
             sys.stdout.write(node.data + " ")
-            self.__inOrderHelper(node.right)
+            self.__inorder_helper(node.right)
 
-    def __postOrderHelper(self, node, std=None):
+    def __postorder_helper(self, node, std=None):
         if node is not None:
-            self.__postOrderHelper(node.left)
-            self.__postOrderHelper(node.right)
+            self.__postorder_helper(node.left)
+            self.__postorder_helper(node.right)
             std.out.write(node.data + " ")
 
     # Pre-Order traversal
     # Node->Left Subtree->Right Subtree
     def preorder(self):
-        self.__preOrderHelper(self.root)
+        self.__preorder_helper(self.root)
 
     # In-Order traversal
     # Left Subtree -> Node -> Right Subtree
     def __inorder(self):
-        self.__inOrderHelper(self.root)
+        self.__inorder_helper(self.root)
 
     # Post-Order traversal
     # Left Subtree -> Right Subtree -> Node
     def __postorder(self):
-        self.__postOrderHelper(self.root)
+        self.__postorder_helper(self.root)
 
     # search the tree for the key k
     # and return the corresponding node
-    def searchTree(self, k):
-        return self.__searchTreeHelper(self.root, k)
+    def search_tree(self, k):
+        return self.__search_tree_helper(self.root, k)
 
     # find the node with the minimum key
-    def minimum(self, node):
+    @staticmethod
+    def minimum(node):
         while node.left is not None:
             node = node.left
         return node
 
     # find the node with the maximum key
-    def maximum(self, node):
+    @staticmethod
+    def maximum(node):
         while node.right is not None:
             node = node.right
         return node
@@ -185,7 +183,7 @@ class AVLTree:
         return y
 
     # rotate left at node x
-    def leftRotate(self, x):
+    def left_rotate(self, x):
         y = x.right
         x.right = y.left
         if y.left is not None:
@@ -206,7 +204,7 @@ class AVLTree:
         y.bf = y.bf - 1 + min(0, x.bf)
 
     # rotate right at node x
-    def rightRotate(self, x):
+    def right_rotate(self, x):
         y = x.left
         x.left = y.right
         if y.right is not None:
@@ -251,13 +249,12 @@ class AVLTree:
             y.right = node
 
         # PART 2: re-balance the node if necessary
-        self.__updateBalance(node)
+        self.__update_balance(node)
 
     # delete the node from the tree
-    def deleteNode(self, data):
-        return self.__deleteNodeHelper(self.root, data)
+    def delete_node(self, data):
+        return self.__delete_node_helper(self.root, data)
 
     # print the tree structure on the screen
-    def prettyPrint(self):
-        self.__printHelper(self.root, "", True)
-
+    def print_tree(self):
+        self.__print_helper(self.root, "", True)
