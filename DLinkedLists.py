@@ -9,7 +9,7 @@ class DoublyLinkedList:
     def __init__(self):
         self.start_node = None
         self.end_node = None
-
+        self.any_node = None
     # Métodos de la lista doblemente enlazada
 
     def insert_in_empty_list(self, data):
@@ -89,21 +89,22 @@ class DoublyLinkedList:
             return
 
         aux = self.start_node.nref
-
-        if self.start_node == x:
+        if aux is None:
+            self.start_node=None
+        elif self.start_node.item == x:
             aux = self.start_node
             self.start_node = self.start_node.nref
             self.start_node.pref = None
             aux.nref = None
             return
-        elif self.end_node == x:
+        elif self.end_node.item == x:
             aux = self.end_node
             self.end_node = self.end_node.pref
             self.end_node.nref = None
             aux.pref = None
             return
         else:
-            while aux.nref is not None:
+            while aux is not None:
                 if aux.item == x:
                     aux.nref.pref = aux.pref
                     aux.pref.nref = aux.nref
@@ -112,6 +113,18 @@ class DoublyLinkedList:
                 aux = aux.nref
             print("Item not found")
             return
+
+    def delete_by_node(self, node):
+        self.any_node = node
+        if self.any_node.pref is None:
+            self.delete_at_start()
+        elif self.any_node.nref is None:
+            self.delete_at_end()
+        else:
+            self.any_node.nref.pref = self.any_node.pref
+            self.any_node.pref.nref = self.any_node.nref
+            self.any_node.nref, self.any_node.pref = None, None
+            self.any_node = None
 
     def delete_at_start(self):
         if self.start_node is None:

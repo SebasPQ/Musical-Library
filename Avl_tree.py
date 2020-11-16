@@ -1,9 +1,12 @@
 import sys
 
+from DLinkedLists import DoublyLinkedList
+
 
 class BNode:
     def __init__(self, data):
         self.data = data
+        self.content = DoublyLinkedList()
         self.parent = None
         self.left = None
         self.right = None
@@ -49,7 +52,6 @@ class AVLTree:
             node.right = self.__delete_node_helper(node.right, key)
         else:
             # the key has been found, now delete it
-
             # case 1: node is a leaf node
             if node.left is None and node.right is None:
                 node = None
@@ -226,28 +228,33 @@ class AVLTree:
         y.bf = y.bf + 1 + max(0, x.bf)
 
     # insert the key to the tree in its appropriate position
-    def insert(self, key):
-        # PART 1: Ordinary BST insert
-        node = BNode(key)
-        y = None
-        x = self.root
-
-        while x is not None:
-            y = x
-            if node.data < x.data:
-                x = x.left
-            else:
-                x = x.right
-
-        # y is parent of x
-        node.parent = y
-        if y is None:
-            self.root = node
-        elif node.data < y.data:
-            y.left = node
+    def insert(self, key, index):
+        # Verifies if node already exists
+        node = self.search_tree(key.item[index])
+        if node is not None:
+            node.content.insert_at_end(key)
         else:
-            y.right = node
+            # PART 1: Ordinary BST insert
+            node = BNode(key.item[index])
+            node.content.insert_at_end(key)
+            y = None
+            x = self.root
 
+            while x is not None:
+                y = x
+                if node.data < x.data:
+                    x = x.left
+                else:
+                    x = x.right
+
+            # y is parent of x
+            node.parent = y
+            if y is None:
+                self.root = node
+            elif node.data < y.data:
+                y.left = node
+            else:
+                y.right = node
         # PART 2: re-balance the node if necessary
         self.__update_balance(node)
 
