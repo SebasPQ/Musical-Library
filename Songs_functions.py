@@ -2,8 +2,9 @@
 # Función ingresar canción
 def new_song(songs_list, trees, song):
     songs_list.insert_at_start(song)
-    for i in range(4):
-        trees[i].insert(songs_list.start_node, i)
+    #for i in range(4):
+    trees[0].insert(songs_list.start_node, 0)
+
 
 
 # Función remover canción
@@ -11,15 +12,14 @@ def remove_song(songs_list, trees, song_name):
     node = trees[0].search_tree(song_name.lower())
     if node is not None:
         trees[0].delete_node(song_name.lower())
-        #trees[0].delete_by_node(node)
-
+        '''
         for i in range(1, 4):
             value = node.content.start_node.item.item[i]
             node_with_value = trees[i].search_tree(value.lower())
             node_with_value.content.delete_by_node(node.content.start_node)
             if node_with_value.content.start_node is None:
                 trees[i].delete_node(node_with_value.data.lower())
-                #trees[i].delete_by_node(node_with_value)
+        '''
         songs_list.delete_by_node(node.content.start_node.item)
     else:
         print("No se encontró la canción "+song_name)
