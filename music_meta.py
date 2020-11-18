@@ -12,7 +12,8 @@ class musicMeta:
     def getMeta(self):
         for root, dirs, files in os.walk(self.path):
             for file in files:
-                if file.endswith('.mp3') or file.endswith('.flac') or file.endswith('.aac') or file.endswith('.wav') or file.endswith('.ogg'):
+                if file.endswith('.mp3') or file.endswith('.flac') or file.endswith('.aac') or 
+                file.endswith('.wav') or file.endswith('.ogg') or file.endswith('mp4'):
                     self.asps.append(os.path.join(root, file))
 
     #se cambia por arboles cuando este implementado
