@@ -5,43 +5,74 @@ import play
 
 sg.theme('BluePurple')
 
-procede=False
-choices=('genre','artist')
+procede=True
+choices=('genre','artist','year')
 
-layout = [[sg.Text('Document to open')],
+config = [[sg.Text('Folder to open')],
           [sg.In(), sg.FolderBrowse(key='-PATH-')],
-          [sg.Open(button_text='Actualizar')],
-          [sg.Text('organizacion a escoger')],
-          [sg.Listbox(choices, size=(15, len(choices)), key='-CHOICES-')],
+          [sg.Text('Defult reproductor')],
+          [sg.In(),sg.FolderBrowse(key='-REPRODUCTOR-')],
           [sg.Button('Ok')]]
 
-window = sg.Window('MusicLib', layout)
+#por el momento van a ser 3 
+category=['genre','artist','year']
+subCategory=[]
+playList=[]
+Sobra=[]
 
-#por el momento no se actualiza con los generos que se encuentren en la lista
-#y solo funciona la reproduccionpor genero por la razon anterior
-while True:  
+choicer = [[sg.Listbox(values=(category), size=(20,3),key='-TREE-',enable_events=True), sg.Listbox(values=(subCategory),size=(20,3),key='-LEAF-')],      
+              [sg.OK()]]
+
+viewer = [[sg.Listbox(values=(category), size=(20,3),key='-PLAYLIST-',enable_events=True), sg.Listbox(values=(subCategory),size=(20,3),key='-NOTPLAY-')],      
+              [sg.Button('Delete'),sg.T('                         '),sg.Button('Add')],
+              [sg.Button('Play')]]
+
+
+def getSub(category):
+    #agregar metodo que llame a un array que contenga los elementos de cada categoria
+    return 
+
+window = sg.Window('MusicLib', config)
+event, values = window.read()
+if event == 'OK':
+    c= Path(values['-PATH-'])
+    d=Path(values['-REPRODUCTOR-'])
+    reproductor=PureWindowsPath(d)
+    b= PureWindowsPath(c)
+    a= musicMeta(b)
+    a.actualizar()
+    # agregar metodo que crea los arboles
+elif event == sg.WIN_CLOSED:
+    procede=False
+window.close()
+
+window = sg.Window('MusicLib', choicer)
+while procede:
+    event, values = window.read()
+    if event == sg.WIN_CLOSED or event == 'Exit':
+        procede=False
+        break
+    if values['-TREE-']:
+        getSub(values['-TREE-'])
+    if event == 'OK' and values['-LEAF-']:
+        #agregar el metodo que crea la playlist y la devuelve como un array
+        break
+window.close()
+
+window = sg.Window('MusicLib',viewer)
+while procede:  
     event, values = window.read()
     if event == sg.WIN_CLOSED or event == 'Exit':
         break
-    if event == 'Actualizar':
-        c= Path(values['-PATH-'])
-        b= PureWindowsPath(c)
-        a= musicMeta(b)
-    if event == 'Ok':
-        if values['-CHOICES-'][0]=='genre':
-            choices= ('Vocal','pizza','sountrack>')
-            layout=[[sg.Text('organizacion a escoger')],
-                    [sg.Listbox(choices, size=(15, len(choices)), key='-CHOICES-')],
-                    [sg.Button('Play')]]
-            procede=True
-            break
-        if values['-CHOICES-'][0]=='artist':
-            break
-window.close()
-if procede:
-    window=sg.Window('MusicLib', layout)
-    event, values = window.read()
+    if event == 'Delete':
+        #agregar metodo que elimina la cancion de la playlist y crea un nuevo arry
+        #o uno que lo elimine dirrectamente del array
+        break
+    if event == 'Add':
+        #lo mismo que el anterior solo que con agregar
+        break
     if event == 'Play':
-        playList= a.compare('genre',values['-CHOICES-'][0])
-        play.play(playList)
-    window.close()
+        #transformar la DList en un array
+        playList= []
+        play.play(playList,reproductor)
+window.close()

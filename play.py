@@ -2,7 +2,7 @@ import subprocess
 import sys
 
 #por el omento uno tiene que agregar la ubicacion de su reproductor
-def play(array):
+def play(array,path):
     a=array
-    a.insert(0,r'C:\Program Files\VideoLAN\VLC\vlc.exe')
+    a.insert(0,path)
     subprocess.run(a)
