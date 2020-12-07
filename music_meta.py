@@ -8,12 +8,12 @@ class musicMeta:
         self.titlePath = []
         self.artist = []
         self.genre = []
+        self.year = []
 
     def getMeta(self):
         for root, dirs, files in os.walk(self.path):
             for file in files:
-                if file.endswith('.mp3') or file.endswith('.flac') or file.endswith('.aac') or 
-                file.endswith('.wav') or file.endswith('.ogg') or file.endswith('mp4'):
+                if file.endswith('.mp3') or file.endswith('.flac') or file.endswith('.aac') or file.endswith('.wav') or file.endswith('.ogg') or file.endswith('mp4'):
                     self.asps.append(os.path.join(root, file))
 
     #se cambia por arboles cuando este implementado
@@ -24,19 +24,9 @@ class musicMeta:
             self.titlePath.append(i)
             self.artist.append(f['artist'])
             self.genre.append(f['genre'])
-
-    def getTitlePath(self):
-        self.actualizar()
-        return self.titlePath
-
-    def getArtist(self):
-        self.actualizar()
-        return self.artist
-
-    def getGenre(self):
-        self.actualizar()
-        return self.genre
+            self.year.append(f['year'])
     
+    #un metodo usado para hacer pruebas eliminar cuando se apliquen los arboles/DList
     def compare(self,array,element):
         playList=[]
         self.actualizar()
@@ -51,3 +41,5 @@ class musicMeta:
                 if str(i) == element:
                     playList.append(self.titlePath[i])
         return playList
+    
+    #colocar metodos que llamen a las estructuras
