@@ -19,7 +19,7 @@ songs_names_tree = AVLTree()
 
 trees = [songs_names_tree]
 genres=['pop', 'rock', 'regaeton', 'jazz', 'salsa', 'cumbia', 'soul', 'metal', 'rap', 'vallenato']
-n=100000
+n=10
 start1 = time.time()
 for i in range(n):
     random1 = random.randint(0, 9)
@@ -58,6 +58,7 @@ end2 = time.time()
 
 print(str(end1 - start1)+' para insertar '+str(n)+' canciones')
 print(str(end2 - start2)+' para borrar '+str(n)+' canciones')
+
 
 
 

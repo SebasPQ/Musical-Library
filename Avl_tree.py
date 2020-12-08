@@ -231,12 +231,12 @@ class AVLTree:
     # insert the key to the tree in its appropriate position
     def insert(self, key, index):
         # Verifies if node already exists
-        node = self.search_tree(key.item[index].lower())
+        node = self.search_tree(str(key.item[index]).lower())
         if node is not None:
             node.content.insert_at_end(key)
         else:
             # PART 1: Ordinary BST insert
-            node = BNode(key.item[index].lower())
+            node = BNode(str(key.item[index]).lower())
             node.content.insert_at_end(key)
             y = None
             x = self.root
