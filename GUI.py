@@ -69,9 +69,16 @@ def createViewerWindow(playList,sobra):
     return sg.Window('MusicLib', layout) 
 
 #otras funciones
-def getSub(category):
+def getSub(category,subCategory):
     #agregar metodo que llame a un array que contenga los elementos de cada categoria
-    return 
+    a=[]
+    if category == 'genre':
+        a= ['genre1','genre2']
+    if category == 'year':
+        a=['1111','1929','2021']
+    if category == 'artist':
+        a=['pepe','manuel','john']
+    return a
 
 #main
 def GUI():
@@ -93,8 +100,8 @@ def GUI():
             d=Path(values['-REPRODUCTOR-'])
             reproductor=PureWindowsPath(d)
             b= PureWindowsPath(c)
-            a= musicMeta(b)
-            a.actualizar()
+            music= musicMeta(b)
+            music.actualizar()
             # agregar metodo que crea los arboles
             save_settings(SETTINGS_FILE, config, values)
             break
@@ -107,7 +114,8 @@ def GUI():
             procede=False
             break
         if values['-TREE-']:
-            getSub(values['-TREE-'])
+            leaf=getSub(values['-TREE-'][0],subCategory)
+            window['-LEAF-'].update(leaf)
         if event == 'OK' and values['-LEAF-']:
             #agregar el metodo que crea la playlist y la devuelve como un array
             break
