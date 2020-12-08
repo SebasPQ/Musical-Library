@@ -74,7 +74,7 @@ def getSub(category):
     return 
 
 #main
-def main():
+def GUI():
     procede=True
     category=['genre','artist','year']
     subCategory=[]
@@ -131,4 +131,4 @@ def main():
             play.play(playList,reproductor)
     window.close()
 
-main()
+GUI()
