@@ -41,9 +41,9 @@ def createConfigWindow(settings):
     folder=settings['path']
     reproductor=settings['reproductor']
     layout = [[sg.Text('Folder to open')],
-            [sg.In(folder), sg.FolderBrowse(key='-PATH-')],
+            [sg.In(folder,key='-PATH-'), sg.FolderBrowse()],
             [sg.Text('Defult reproductor')],
-            [sg.In(reproductor),sg.FileBrowse(key='-REPRODUCTOR-')],
+            [sg.In(reproductor,key='-REPRODUCTOR-'),sg.FileBrowse()],
             [sg.Button('Ok')]] 
 
     for key in SETTINGS_KEYS_TO_ELEMENT_KEYS:   # update window with the values read from settings file
@@ -69,16 +69,14 @@ def createViewerWindow(playList,sobra):
     return sg.Window('MusicLib', layout) 
 
 #otras funciones
-def getSub(category,subCategory):
-    #agregar metodo que llame a un array que contenga los elementos de cada categoria
-    a=[]
-    if category == 'genre':
-        a= ['genre1','genre2']
-    if category == 'year':
-        a=['1111','1929','2021']
-    if category == 'artist':
-        a=['pepe','manuel','john']
-    return a
+def getSub(music,category):
+    return music.showTree(category)
+
+def getViewList(music,category,subCategory):
+    return music.getItems(category,subCategory)
+
+def getPlayList(music,items):
+    return music.getPlayList(items)
 
 #main
 def GUI():
@@ -108,16 +106,18 @@ def GUI():
     window.close()
 
     window = createChoicerWindow(category,subCategory)
+    playList=[]
     while procede:
         event, values = window.read()
         if event == sg.WIN_CLOSED or event == 'Exit':
             procede=False
             break
         if values['-TREE-']:
-            leaf=getSub(values['-TREE-'][0],subCategory)
+            leaf=getSub(music,values['-TREE-'][0])
             window['-LEAF-'].update(leaf)
         if event == 'OK' and values['-LEAF-']:
             #agregar el metodo que crea la playlist y la devuelve como un array
+            playList=getViewList(music,values['-TREE-'][0],values['-LEAF-'][0])
             break
     window.close()
 
@@ -129,14 +129,14 @@ def GUI():
         if event == 'Delete':
             #agregar metodo que elimina la cancion de la playlist y crea un nuevo arry
             #o uno que lo elimine dirrectamente del array
-            break
+            print('aun no implementado')
         if event == 'Add':
             #lo mismo que el anterior solo que con agregar
-            break
+            print('aun no implementado')
         if event == 'Play':
             #transformar la DList en un array
-            playList= []
-            play.play(playList,reproductor)
+            items=getPlayList(music,playList)
+            play.play(items,reproductor)
     window.close()
 
 GUI()
