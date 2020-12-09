@@ -64,7 +64,7 @@ def createChoicerWindow(category,subCategory):
 
 def createViewerWindow(playList,sobra):
     layout = [[sg.Listbox(values=(playList), size=(20,3),key='-PLAYLIST-',enable_events=True), sg.Listbox(values=(sobra),size=(20,3),key='-NOTPLAY-')],      
-                [sg.Button('Delete'),sg.T('                         '),sg.Button('Add')],
+                [sg.Button('Like'),sg.T('                           '),sg.Button('Add')],
                 [sg.Button('Play')]]
     return sg.Window('MusicLib', layout) 
 
