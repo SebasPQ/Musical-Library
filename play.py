@@ -5,4 +5,4 @@ import sys
 def play(array,path):
     a=array
     a.insert(0,path)
-    subprocess.run(a)
+    subprocess.run(a) 
