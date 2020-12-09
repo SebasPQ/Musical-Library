@@ -7,17 +7,19 @@ import operator
 class PathFinder:
 
     paths = []
-    choice = "0"
     library = {}
+    songs_library = {}
     frequencies = {}
-    interactions = []
+    songs = []
+    choice = "0"
     message = "MusicLib: path finder"
 
     def __init__(self, name):
         try:
             with open(name, "r", encoding="utf-8") as file:
-                self.interactions = [line[:-1] for line in file.readlines()]
-                csv = [interaction.split(",") for interaction in self.interactions]
+                self.songs = [line[:-1] for line in file.readlines()]
+                csv = [attributes.split(",") for attributes in self.songs]
+                self.songs_library = dict((row[1], i) for i, row in enumerate(csv))
         except (FileNotFoundError, OSError):
             self.library = {}
         else:
@@ -26,7 +28,7 @@ class PathFinder:
                 songs = []
                 for row in csv:
                     if row[0] == artist:
-                        songs.append(row[1])
+                        songs.append((row[1], row[2]))
                 self.library[artist] = songs
 
     def _add_path(self, path_i, path=""):
@@ -46,7 +48,7 @@ class PathFinder:
     def _create_path(self, num_interactions, path="", add=True):
         path_i = []
         while num_interactions > 0:
-            path_i.append(random.randint(0, len(self.interactions)-1))
+            path_i.append(random.randint(0, len(self.songs) - 1))
             path += "." + str(path_i[-1])
             num_interactions -= 1
         if add:
@@ -60,13 +62,13 @@ class PathFinder:
         if path[0] != '':
             path = [int(num) for num in path]
             for index in path:
-                info += self.interactions[index] + " | "
+                info += self.songs[index] + " | "
         return info[:-3]
 
     def get_info_path_i(self, path_i):
-        return [self.interactions[i] for i in path_i]
+        return [self.songs[i] for i in path_i]
 
-    def simulate_paths(self, num_paths, max_interactions=10, progress=120, num_i=0):
+    def simulate_paths(self, num_paths, max_interactions=10, progress=100, num_i=0):
         while num_i < num_paths:
             if not num_i % progress:
                 percentage = int(100*num_i/num_paths)
@@ -126,10 +128,22 @@ class PathFinder:
             time.sleep(2)
             self.start()
         elif self.choice == "2":
-            self.select("Generar una ruta.", [])
-            num1 = int(input("      -Ingrese el numero de interacciones en la ruta: "))
-            path, path_i = self._create_path(num1, add=False)
-            print("\n      ¡Ruta creada con exito!")
+            path, path_i = "", ""
+            options_menu_2 = ["Elegir canción", "Escoger aleatoriamente"]
+            self.select("Generar una ruta.", options_menu_2)
+            if self.choice == "1":
+                song_name = input("      -Ingrese el nombre de la canción: ")
+                song_index = self.songs_library.get(song_name)
+                path, path_i = '.' + str(song_index), [song_index]
+            elif self.choice == "2":
+                num1 = int(input("\n      -Ingrese el numero de interacciones en la ruta: "))
+                path, path_i = self._create_path(num1, add=False)
+            if path_i[0] is None:
+                print("\n    La canción no se encontró.")
+                input("\n    Presiona cualquier tecla para volver al menu...")
+                self.start()
+            else:
+                print("\n      ¡Ruta creada con exito!")
             time.sleep(1)
             self.select("Informacion de la ruta.", [])
             print("      -La ruta simulada ({}) es: \n".format(path))
@@ -142,7 +156,7 @@ class PathFinder:
             print("\n      -Las primeras recomendaciones para la ruta '{}' son:\n".format(final_path))
             sum_frequencies = 0
             for index, frequency in frequencies:
-                print("        + {}  # {}".format(self.interactions[int(index[1:])], frequency))
+                print("        frec: {} > {}  ".format(frequency, self.songs[int(index[1:])]))
                 sum_frequencies += frequency
             print("\n      -INFORMACION DE LA BUSQUEDA:")
             print("\n        + Ruta original: {}".format(self.get_info_path(path)))
@@ -164,6 +178,6 @@ class PathFinder:
         print("    {}{}{}{}".format(edge, progress_bar[:49], "|{}%|".format(percentage), progress_bar[54:]), end="\n\n")
 
 
-library = PathFinder("data 2020.csv")
-library.simulate_paths(10000, progress=100)
+library = PathFinder("songs_data.csv")
+library.simulate_paths(10000, progress=1000)
 library.start()
