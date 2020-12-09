@@ -24,7 +24,7 @@ class musicMeta:
         self.getMeta() 
         for i in self.asps:
             f=music_tag.load_file(i)
-            self.songs.insert_at_start([f['title'],f['artist'],f['genre'],f['year'],i])
+            self.songs.insert_at_start([str(f['title']),str(f['artist']),str(f['genre']),str(f['year']),i])
             for x in range(len(self.trees)):
                 self.trees[x].insert(self.songs.start_node,x)
         self.asps.clear()
@@ -43,13 +43,6 @@ class musicMeta:
         else:
             print("No se encontró la canción "+song_name)
 
-    def show_song(self, song_name):
-        node = self.trees[0].search_tree(str(song_name).lower())
-        if node is not None:
-            print(node.content.start_node.item.item)
-        else:
-            print("No se encontró la canción "+song_name)
-
     def showTree(self,category):
         node=None
         if category=='artist':
@@ -64,7 +57,7 @@ class musicMeta:
         array=node.dListToArray(tree)
         return array
 
- '''
+
     def getItems(self,category,subCategory):
         node=None
         if category=='artist':
@@ -76,8 +69,27 @@ class musicMeta:
         elif category=='year':
             node=self.trees[3].root.content
             tree=3
+        array=node.throwContent(tree,subCategory)
+        return array
+
+    def show_song(self, song_name):
+        node = self.trees[0].search_tree(str(song_name).lower())
+        if node is not None:
+            print(node.content.start_node.item.item)
+        else:
+            print("No se encontró la canción "+song_name)
         
+    def getPlayList(self,items):
+        array=[]
+        for x in items:
+            node = self.trees[0].search_tree(str(x).lower())
+            if node:
+                array.append(node.content.start_node.item.item[4])
+        return array
+
 #pruebas
 z= musicMeta(r'C:\Users\guion\Music')
 z.actualizar()
-print(z.showTree('year'))
+w=z.getItems('year','2001')
+z.show_song(w[0])
+print(z.getPlayList(w))

@@ -187,4 +187,14 @@ class DoublyLinkedList:
                 n = n.nref
         return array
 
-  
+    def throwContent(self,tree,subTree):
+        array=[]
+        if self.start_node is None:
+            return
+        else:
+            n = self.start_node
+            while n is not None:
+                if str(n.item.item[tree]) == subTree:
+                    array.append(str(n.item.item[0]))
+                n = n.nref
+        return array
