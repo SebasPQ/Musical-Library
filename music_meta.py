@@ -51,16 +51,16 @@ class musicMeta:
             print("No se encontró la canción "+song_name)
 
     def showTree(self,category):
-        node=None
+        node=self.songs
         tree=0
         if category=='artist':
-            node=self.trees[1].root.content
+            #node=self.trees[1].root.content
             tree=1
         elif category=='genre':
-            node=self.trees[2].root.content
+            #node=self.trees[2].root.content
             tree=2
         elif category=='year':
-            node=self.trees[3].root.content
+            #node=self.trees[3].root.content
             tree=3
         array=node.dListToArray(tree)
         return array

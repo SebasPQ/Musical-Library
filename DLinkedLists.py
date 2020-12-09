@@ -175,16 +175,13 @@ class DoublyLinkedList:
 
     def dListToArray(self,tree):
         array=[]
-        if self.start_node is None:
-            return
-        else:
-            n = self.start_node
-            while n is not None:
-                if str(n.item.item[tree]) in array:
-                    print(f'{str(n.item.item[tree])} ya existe')
-                else:
-                    array.append(str(n.item.item[tree]))
-                n = n.nref
+        n = self.start_node
+        while n is not None:
+            if str(n.item[tree]) in array or str(n.item[tree]) =='':
+                print(f'{str(n.item[tree])} ya existe')
+            else:
+                array.append(str(n.item[tree]))
+            n = n.nref
         return array
 
     def throwContent(self,tree,subTree):
